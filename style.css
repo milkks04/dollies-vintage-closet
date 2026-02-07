@@ -1,19 +1,25 @@
 /* ====== Base ====== */
 :root{
-  --pink-1:#ffd6ea;
-  --pink-2:#ffb7d8;
-  --pink-3:#ff86c3;
-  --cream:#fff7fb;
+  /* pinks */
+  --pink-1: #fde6ef;  /* light blush */
+  --pink-2: #f7b6cf;  /* soft pink */
+  --pink-3: #f19bbd;  /* deeper pink dots */
 
-  --ink:#2b1b25;
-  --muted:#6b5061;
+  /* browns */
+  --brown-1: #6b4a3a; /* chocolate brown */
+  --brown-2: #8a5e4b; /* lighter brown */
 
-  /* MM-ish border vibe */
-  --border:#ff7fbe;
-  --border2:#ffd0e6;
+  --cream: #fffafc;
 
-  --radius:16px;
-  --shadow: 0 14px 30px rgba(0,0,0,.18);
+  --ink: #3a2a24;
+  --muted: #7a5a50;
+
+  /* borders */
+  --border: #8a5e4b;   /* brown border */
+  --border2: #f19bbd;  /* pink accent */
+
+  --radius: 16px;
+  --shadow: 0 14px 30px rgba(60,40,30,.18);
 }
 
 *{box-sizing:border-box}
@@ -23,6 +29,11 @@ body{
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color:var(--ink);
   overflow-x:hidden;
+
+  background:
+    radial-gradient(circle, var(--pink-3) 1.5px, transparent 1.5px),
+    #fff;
+  background-size: 26px 26px;
 }
 
 /* ====== Background layers (apple/plaid + leopard + stars) ====== */
@@ -30,14 +41,6 @@ body{
   position:fixed; inset:0;
   pointer-events:none;
   z-index:-3;
-}
-
-/* soft base */
-body{
-  background:
-    radial-gradient(circle at 20% 10%, rgba(255,255,255,.7), rgba(255,255,255,0) 40%),
-    radial-gradient(circle at 90% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 45%),
-    linear-gradient(180deg, #ffeaf6 0%, #ffe0f1 40%, #fff 100%);
 }
 
 /* apple/plaid-ish */
@@ -126,19 +129,31 @@ body{
 .window{
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  background: rgba(255,255,255,.70);
-  border: 2px solid rgba(255,255,255,.85);
+  background: rgba(255,255,255,.85);
+
+  border: 3px solid var(--border);
   overflow:hidden;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
   position:relative;
+
+  /* lace / scrapbook edge effect */
+  background-image:
+    linear-gradient(#fff, #fff),
+    repeating-linear-gradient(
+      45deg,
+      transparent 0 6px,
+      rgba(241,155,189,.12) 6px 12px
+    );
+  background-origin: border-box;
 }
 
 /* cute inner border like old UI */
 .window::before{
   content:"";
-  position:absolute; inset:8px;
-  border-radius: calc(var(--radius) - 8px);
-  border: 2px solid rgba(255, 127, 190, .35);
+  position:absolute;
+  inset:6px;
+  border-radius: calc(var(--radius) - 6px);
+  border: 2px solid var(--border2);
   pointer-events:none;
 }
 
@@ -146,17 +161,20 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding: 10px 10px;
+  padding: 10px 12px;
+
   background:
-    linear-gradient(180deg, rgba(255,183,216,.95), rgba(255,214,234,.75));
-  border-bottom: 5px solid rgba(255,127,190,.35);
+    linear-gradient(180deg, #f7b6cf, #fde6ef);
+
+  border-bottom: 3px solid var(--border);
 }
 
 .titlebar .title{
   font-weight: 700;
   font-size: 13px;
-  letter-spacing:.3px;
+  letter-spacing:.4px;
   text-transform: lowercase;
+  color: var(--brown-1);
 }
 
 .controls{
@@ -266,21 +284,24 @@ body{
 .linkbtn{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:12px;
   text-decoration:none;
-  padding: 12px 12px;
+
+  padding: 14px;
   border-radius: 14px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,214,234,.55));
-  border: 2px solid rgba(255,127,190,.35);
-  box-shadow: 0 10px 18px rgba(0,0,0,.10);
+
+  background: #fff5f9;
+  border: 2px solid var(--border);
+
+  box-shadow: 0 8px 16px rgba(60,40,30,.12);
   color: var(--ink);
   font-weight: 650;
-  transition: transform .08s ease, filter .08s ease;
+
+  transition: transform .08s ease, box-shadow .08s ease;
 }
 .linkbtn:hover{
   transform: translateY(-2px);
-  filter: brightness(1.02);
+  box-shadow: 0 12px 20px rgba(60,40,30,.18);
 }
 
 /* icon images inside link buttons */
@@ -334,7 +355,24 @@ body{
 }
 
 /* ====== Responsive ====== */
+/* MOBILE: stack + custom order */
 @media (max-width: 900px){
-  .desktop{ grid-template-columns: 1fr; }
-  .banner img{ height: 160px; }
+  .desktop{
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* order (lower number shows first) */
+  .win-banner { order: 1; }
+  .win-profile{ order: 2; }
+  .win-song   { order: 3; }
+  .win-about  { order: 4; }
+  .win-links  { order: 5; }
+
+  /* show the banner fully (no crop) */
+  .banner img{
+    height: auto;        /* let it scale naturally */
+    object-fit: contain; /* show whole image */
+    background: rgba(255,255,255,.35); /* optional: nice behind letterboxing */
+  }
 }

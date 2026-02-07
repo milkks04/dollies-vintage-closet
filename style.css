@@ -355,18 +355,24 @@ body{
 }
 
 /* ====== Responsive ====== */
-/* MOBILE: stack + custom order */
 @media (max-width: 900px){
+  /* turn the whole layout into one single stack */
   .desktop{
     display: flex;
     flex-direction: column;
+    gap: 16px;
   }
 
-  /* order (lower number shows first) */
-  .win-banner { order: 1; }
-  .win-profile{ order: 2; }
-  .win-song   { order: 3; }
-  .win-about  { order: 4; }
+  /* stop the columns from interfering */
+  .col{
+    display: contents;
+  }
+
+  /* mobile order */
+  .win-profile{ order: 1; }
+  .win-banner { order: 2; }
+  .win-about  { order: 3; }
+  .win-song   { order: 4; }
   .win-links  { order: 5; }
 
   /* show the banner fully (no crop) */
